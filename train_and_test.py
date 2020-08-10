@@ -8,8 +8,8 @@ from sklearn import metrics
 # num-authors and prev-games should in theory, correlate with experience level of a team, so these
 # should be useful features.
 # TODO: may want to add num-authors and prev-games to irrelevant_features
-irrelevant_features = ['name', 'slug', 'path', 'competition-num', 'category', 'description', 'published', 'modified',
-                       'version']
+irrelevant_features = ['name', 'slug', 'path', 'category', 'description', 'published', 'modified', 'link-tags',
+                       'links', 'num-authors', 'competition-num']
 # Load training set
 train_data = pd.read_csv('dataset/train.csv')
 train_data.set_index('id', inplace=True)
@@ -32,12 +32,12 @@ test_features.fillna("", inplace=True)
 # Convert the 'links' and 'link-tags' features to their counts (aggregation). These features are colon separated.
 # We care about these features, since they should, in theory, roughly correlate with the competition authors' engagement
 # and hence, rank in the competition.
-def aggregate(x):
-    return len(x.split(';')) if x else 0
-train_features['links'] = train_features['links'].apply(aggregate)
-train_features['link-tags'] = train_features['link-tags'].apply(aggregate)
-test_features['links'] = test_features['links'].apply(aggregate)
-test_features['link-tags'] = test_features['link-tags'].apply(aggregate)
+# def aggregate(x):
+#     return len(x.split(';')) if x else 0
+# train_features['links'] = train_features['links'].apply(aggregate)
+# train_features['link-tags'] = train_features['link-tags'].apply(aggregate)
+# test_features['links'] = test_features['links'].apply(aggregate)
+# test_features['link-tags'] = test_features['link-tags'].apply(aggregate)
 
 # Create a Random Forest Classifier (the model).
 # Chosen params for RandomForestClassifier were found by searching a sample space of params
