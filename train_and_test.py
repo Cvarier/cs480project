@@ -36,6 +36,7 @@ test_features['link-tags'] = test_features['link-tags'].apply(aggregate)
 
 # Create a Random Forest Classifier (the model)
 
+# TODO: optimize features used for training
 # TODO: optimize n_estimators using GridSearchCV
 clf = RandomForestClassifier(n_estimators=100)
 
