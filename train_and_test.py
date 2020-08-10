@@ -1,9 +1,14 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn import metrics
 
 # --- Assume all the datasets are located in a folder 'dataset/' within the current working directory ---
 
+# Declare all features which won't be used for training.
+# num-authors and prev-games should in theory, correlate with experience level of a team, so these
+# should be useful features.
+# TODO: may want to add num-authors and prev-games to irrelevant_features
 irrelevant_features = ['name', 'slug', 'path', 'competition-num', 'category', 'description', 'published', 'modified',
                        'version']
 # Load training set
@@ -24,6 +29,7 @@ test_features.drop(labels=irrelevant_features, axis=1, inplace=True)
 train_features.fillna("", inplace=True)
 test_features.fillna("", inplace=True)
 
+# TODO: might want to drop 'links' and 'link-tags' features
 # Convert the 'links' and 'link-tags' features to their counts (aggregation). These features are colon separated.
 # We care about these features, since they should, in theory, roughly correlate with the competition authors' engagement
 # and hence, rank in the competition.
@@ -36,7 +42,6 @@ test_features['link-tags'] = test_features['link-tags'].apply(aggregate)
 
 # Create a Random Forest Classifier (the model)
 
-# TODO: optimize features used for training
 # TODO: optimize n_estimators using GridSearchCV
 clf = RandomForestClassifier(n_estimators=100)
 
