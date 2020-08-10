@@ -6,4 +6,5 @@ Make sure to have the following dependencies installed:
 
 - python 3.8.3
 - pandas 1.1.0
+- numpy 1.18.5
 - scikit-learn 0.23.1
