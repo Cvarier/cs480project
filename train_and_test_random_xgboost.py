@@ -8,9 +8,8 @@ from sklearn import metrics
 # Declare all features which won't be used for training.
 # num-authors and prev-games should in theory, correlate with experience level of a team, so these
 # should be useful features.
-# TODO: may want to add num-authors and prev-games to irrelevant_features
-irrelevant_features = ['name', 'slug', 'path', 'category', 'description', 'published', 'modified', 'link-tags',
-                       'links', 'version', 'num-authors', 'competition-num']
+irrelevant_features = ['name', 'slug', 'path', 'category', 'description', 'published', 'modified',
+                       'version', 'num-authors', 'competition-num']
 # Load training set
 train_data = pd.read_csv('dataset/train.csv')
 train_data.set_index('id', inplace=True)
@@ -29,16 +28,15 @@ test_features.drop(labels=irrelevant_features, axis=1, inplace=True)
 train_features.fillna("", inplace=True)
 test_features.fillna("", inplace=True)
 
-# TODO: might want to drop 'links' and 'link-tags' features
 # Convert the 'links' and 'link-tags' features to their counts (aggregation). These features are colon separated.
-# We care about these features, since they should, in theory, roughly correlate with the competition authors' engagement
+# We care about these features, since they should, in theory, roughly correlate with the authors' engagement
 # and hence, rank in the competition.
-# def aggregate(x):
-#     return len(x.split(';')) if x else 0
-# train_features['links'] = train_features['links'].apply(aggregate)
-# train_features['link-tags'] = train_features['link-tags'].apply(aggregate)
-# test_features['links'] = test_features['links'].apply(aggregate)
-# test_features['link-tags'] = test_features['link-tags'].apply(aggregate)
+def aggregate(x):
+    return len(x.split(';')) if x else 0
+train_features['links'] = train_features['links'].apply(aggregate)
+train_features['link-tags'] = train_features['link-tags'].apply(aggregate)
+test_features['links'] = test_features['links'].apply(aggregate)
+test_features['link-tags'] = test_features['link-tags'].apply(aggregate)
 
 def log_transform(x):
     return np.sign(x)*np.log(np.abs(x)+1)
@@ -48,15 +46,15 @@ for ind, column in enumerate(train_features.columns):
     train_features[column] = train_features[column].apply(log_transform)
     test_features[column] = test_features[column].apply(log_transform)
 
-# Create a Random Forest Classifier (the model).
-# Chosen params for RandomForestClassifier were found by searching a sample space of params
-# with RandomizedSearchCV.
-clf = XGBClassifier()
+# Create a Gradient Boost Classifier (the model).
+# Chosen params for XGBClassifier were found by searching a sample space of params
+# with GridSearchCV.
+clf = XGBClassifier(n_estimators=400)
 
 # Train the model using the training set
 clf.fit(train_features, train_labels)
 
-# Predict using the trained model on the testing set
+# # Predict using the trained model on the testing set
 test_labels = clf.predict(test_features)
 
 # Dump predictions to csv submission file
