@@ -1,6 +1,6 @@
 To run the program, run `python train_and_test`.
 
-The program uses a Random Forest classifier as the main model.
+The program uses a XGBoost (Gradient Boosting) classifier as the main model.
 
 Make sure to have the following dependencies installed:
 
@@ -8,3 +8,4 @@ Make sure to have the following dependencies installed:
 - pandas 1.1.0
 - numpy 1.18.5
 - scikit-learn 0.23.1
+- xgboost 1.1.1

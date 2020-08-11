@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 from sklearn import metrics
 
 # --- Assume all the datasets are located in a folder 'dataset/' within the current working directory ---
@@ -51,7 +51,7 @@ for ind, column in enumerate(train_features.columns):
 # Create a Random Forest Classifier (the model).
 # Chosen params for RandomForestClassifier were found by searching a sample space of params
 # with RandomizedSearchCV.
-clf = RandomForestClassifier(n_estimators=100, max_features='sqrt', min_samples_split=2, min_samples_leaf=2, bootstrap=False)
+clf = XGBClassifier()
 
 # Train the model using the training set
 clf.fit(train_features, train_labels)
